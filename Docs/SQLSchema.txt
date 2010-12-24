@@ -58,7 +58,7 @@ Card Types
             Defense     int
             Magic       int
             CC          int
-            SpAbility   ?
+            SpAbility   int
             Class       int     // Bitfield for equipment/arte usage
             HP          int
             
@@ -112,7 +112,7 @@ Card Types
                 // See effect table
     
     
-    3 - Accessory
+    4 - Accessory
             CCIncrease  int
             AttPower    int
             DefPower    int
@@ -126,7 +126,7 @@ Card Types
                 // See effect table
 
 
-    3 - Item
+    5 - Item
             CCCost      int
 
             EffectA     int
