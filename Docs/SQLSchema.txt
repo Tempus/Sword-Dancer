@@ -1,0 +1,81 @@
+Tales CCG SQL Schema
+
+
+
+TABLE PlayerList
+    ID      primary_key     // Unique player ID
+    Name    varchar(32)     // Player Name
+    Desc    varchar(255)    // A player description
+    Rank    int             // A ranking numeric for the ladder
+    Money   int             // A count of their in-game currency
+    
+    
+
+TABLE Record
+    ID      primary_key     // unique game ID
+    POne    foreign_key     // ID of player from PlayerList
+    PTwo    foreign_key     // ID of player from PlayerList
+    Result  int             // P1 win, P2 win, P1 win by disconnect, P2 win by disconnect, Tie
+    Date    int             // Unix time date (or an SQL date field, if your SQL db supports it, and you prefer it
+
+
+
+
+TABLE <player>DECK
+    CardID  foreign_key     // specifies the ID of the card from CardList
+    Amount  int             // amount the player owns
+    inDeck  int             // how many of these cards are in the player's deck
+    
+    
+
+
+TABLE CardList
+    ID      primary_key     // Unique ID
+    Type    int             // Type of Card
+    Name    varchar(32)     // Card Name
+    Desc    varchar(65535)    // Card description
+
+
+
+
+
+Card Types
+
+    0 - Character Type
+            Attack      int
+            Defense     int
+            Magic       int
+            CC          int
+            SpAbility   ?
+            Class       int     // For equipment
+            
+            
+            
+    1 - Arte
+            Type        int
+                0 = None
+                1 = Attack
+                2 = Defense
+                3 = Magic
+                4 = Att & Magic
+            CC          int
+            BasePower   int
+            Class       int
+            
+            EffectA     int
+                See effect table
+            EffectAQuan int
+                See effect table
+            EffectB     int
+                See effect table
+            EffectBQuan int
+                See effect table
+            EffectC     int
+                See effect table
+            EffectCQuan int
+                See effect table
+            
+    2 - Equipment
+    
+    
+    3 - Item
