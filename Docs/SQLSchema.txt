@@ -4,13 +4,15 @@ Tales CCG SQL Schema
 
 TABLE PlayerList
     ID      primary_key     // Unique player ID
+    Username varchar(32)    // Username
+    Password varchar(32)    // Password
+    Hostmask varchar(64)    // an IRC hostmask to filter by
     Name    varchar(32)     // Player Name
-    Desc    varchar(255)    // A player description
+    Desc    varchar(256)    // A player description
     Rank    int             // A ranking numeric for the ladder
     Money   int             // A count of their in-game currency
     
     
-
 TABLE Record
     ID      primary_key     // unique game ID
     POne    foreign_key     // ID of player from PlayerList
@@ -19,25 +21,34 @@ TABLE Record
     Date    int             // Unix time date (or an SQL date field, if your SQL db supports it, and you prefer it
 
 
-
-
 TABLE PlayerDeck
+    DeckID  primary_key
     PID     foreign_key     // specifies the ID of the player from PlayerList
+    Name    varchar/whatever
+    etc
+
+
+TABLE PlayerDeckMapping
+    DeckID  foreign_key     // specifies the ID of the deck from PlayerDeck
     CardID  foreign_key     // specifies the ID of the card from CardList
-    Amount  int             // amount the player owns
-    inDeck  int             // how many of these cards are in the player's deck
-    
-    
+
+
+TABLE PlayerCards
+    PID     foreign_key // id from PlayerList
+    CardID  foreign_key // id from CardList
+    Amount  int         // owned card count    
 
 
 TABLE CardList
     ID      primary_key     // Unique ID
     Type    int             // Type of Card
     Name    varchar(32)     // Card Name
-    Desc    varchar(65535)    // Card description
+    Desc    varchar(512)    // Card description
 
-
-
+    FieldA  int
+    FieldB  int
+    FieldC  int
+    etc... 12 fields in all so far
 
 
 Card Types
@@ -48,35 +59,78 @@ Card Types
             Magic       int
             CC          int
             SpAbility   ?
-            Class       int     // For equipment
+            Class       int     // Bitfield for equipment/arte usage
+            HP          int
+            
+            Level       int
+            HPGrowth    int
+            AttGrowth   int
+            DefGrowth   int
+            MagGrowth   int
             
             
             
     1 - Arte
-            Type        int
-                0 = None
-                1 = Attack
-                2 = Defense
-                3 = Magic
-                4 = Att & Magic
-            CC          int
-            BasePower   int
-            Class       int
+            CCCost      int
+            AttPower    int
+            DefPower    int
+            MagPower    int
+            Class       int     // Bitfield for character mappings
             
             EffectA     int
-                See effect table
             EffectAQuan int
-                See effect table
             EffectB     int
-                See effect table
             EffectBQuan int
-                See effect table
-            EffectC     int
-                See effect table
-            EffectCQuan int
-                See effect table
+                // See effect table
+
             
-    2 - Equipment
+    2 - Weapon
+            CCIncrease  int
+            AttPower    int
+            DefPower    int
+            MagPower    int
+            Class       int     // Bitfield for character mappings
+            
+            EffectA     int
+            EffectAQuan int
+            EffectB     int
+            EffectBQuan int
+                // See effect table
+
+    
+    3 - Armor
+            CCIncrease  int
+            AttPower    int
+            DefPower    int
+            MagPower    int
+            Class       int     // Bitfield for character mappings
+            
+            EffectA     int
+            EffectAQuan int
+            EffectB     int
+            EffectBQuan int
+                // See effect table
     
     
+    3 - Accessory
+            CCIncrease  int
+            AttPower    int
+            DefPower    int
+            MagPower    int
+            Class       int     // Bitfield for character mappings
+            
+            EffectA     int
+            EffectAQuan int
+            EffectB     int
+            EffectBQuan int
+                // See effect table
+
+
     3 - Item
+            CCCost      int
+
+            EffectA     int
+            EffectAQuan int
+            EffectB     int
+            EffectBQuan int
+                // See effect table
