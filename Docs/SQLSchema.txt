@@ -21,7 +21,8 @@ TABLE Record
 
 
 
-TABLE <player>DECK
+TABLE PlayerDeck
+    PID     foreign_key     // specifies the ID of the player from PlayerList
     CardID  foreign_key     // specifies the ID of the card from CardList
     Amount  int             // amount the player owns
     inDeck  int             // how many of these cards are in the player's deck
