@@ -1,0 +1,46 @@
+Effect List
+
+
+Effects generate actions based on a quantity. The actions are numerous and varied. 
+The quantity is represented below as <#>.
+
+
+
+Block the first <#> attacks in a chain.
+Block the first <#> spells in a chain.
+Block the first <#> artes in a chain.
+Heal single Hero for <#>% HP.
+Heal all ally Heroes for <#>% HP.
+Opponent loses <#> turns.
+Own turn ends.
+Target Hero gains <#> CC.
+All ally Heroes gain <#> CC.
+Deal <#> Damage to card user.
+Deal <#> Damage to all allies.
+Revives target Hero for <#>% HP.
+Increase Attack of next arte chain by <#>
+Increase Magic of next arte chain by <#>
+Increase Attack of next arte chain by <#>%
+Increase Magic of next arte chain by <#>%
+Increases target Hero Defense by <#> until beginning of owner's next turn
+Increases target Hero Defense by <#>% until beginning of owner's next turn
+Decreases all CC costs this turn for Hero by <#>
+Decreases all CC costs this turn for allies by <#>
+Decreases all CC costs this turn for opponents by <#>
+
+
+
+Effects can also be activation conditions. It makes it more dramatic!
+
+
+Activates at beginning of opponent's <#>th chain
+Activates during the next resolution phase of opponent
+Activates when Hero drops below <#>% HP
+Activates when Ally drops below <#>% HP
+Activates when Hero dies
+Activates when an Ally Hero dies
+Activates when an Enemy Hero drops below <#>% HP
+Activates when an Enemy Hero dies
+Activates when an enemy plays an item
+Activates when an enemy plays a recipe
+Activates when an enemy equips something

@@ -37,13 +37,15 @@ TABLE PlayerCards
     PID     foreign_key // id from PlayerList
     CardID  foreign_key // id from CardList
     Amount  int         // owned card count    
-
+    Level   int         // only used for type 0 Cards
+    
 
 TABLE CardList
     ID      primary_key     // Unique ID
     Type    int             // Type of Card
     Name    varchar(32)     // Card Name
     Desc    varchar(512)    // Card description
+    Rarity  int             // Card rarity
 
     FieldA  int
     FieldB  int
@@ -76,6 +78,16 @@ Card Types
             DefPower    int
             MagPower    int
             Class       int     // Bitfield for character mappings
+            Category    int
+                0 - Base Arte
+                1 - Master Arte
+                2 - Arcane Arte
+                3 - Novice Spell
+                4 - Intermediate Spell
+                5 - Advanced Spell
+                6 - Mystic Arte
+            
+            Family      int
             
             EffectA     int
             EffectAQuan int
@@ -89,6 +101,7 @@ Card Types
             AttPower    int
             DefPower    int
             MagPower    int
+            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
@@ -103,6 +116,7 @@ Card Types
             AttPower    int
             DefPower    int
             MagPower    int
+            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
@@ -117,6 +131,7 @@ Card Types
             AttPower    int
             DefPower    int
             MagPower    int
+            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
@@ -129,6 +144,13 @@ Card Types
     5 - Item
             CCCost      int
 
+            EffectA     int
+            EffectAQuan int
+            EffectB     int
+            EffectBQuan int
+                // See effect table
+
+    6 - Recipe
             EffectA     int
             EffectAQuan int
             EffectB     int

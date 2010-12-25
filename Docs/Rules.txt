@@ -1,0 +1,75 @@
+Rules and Game Description
+
+
+Setup
+
+Each Player starts with 2 Hero Cards on the field, and a deck of 30-50 cards (tentative amount).
+
+
+Objective
+
+The Objective is to defeat both of your opponent's characters. Each Hero Card has a set amount of HP. The HP can be decreased by Artes, Items, Equipment and Special Effects, or increased by Artes, Items, Equipment, and Special Effects. Once a character is dead, they are removed from play except in the case of a revival card. When both characters have HPs below 0, their owner loses the game.
+
+
+Gameplay
+
+The gameplay takes place in a series of alternating turns. A turn begins by the player drawing a card. All Hero Card CC is restored at the beginning of each turn.
+
+During a player's turn, they can take the following actions:
+
+ - Use a Recipe Card. One recipe card can be played per turn. It takes effect immediately.
+ - Use an Item Card. Item Cards must be played by a Hero Card, and consume their CC. They take effect immediately.
+ - Use any Equipment Cards. Equipment cards bestow passive effects, and cost 4 CC to equip. Only one of each
+       equipment type may be equipped per Hero Card at any one time.
+ - De-equip any equipment card. Costs 4 CC. Equipping an equipment card overtop an existing one does not count
+       as both a de-equip and equip action, just a single equip action (the old equipment is de-equipped regardless)
+ - Setup any Arte Cards. Arte cards can chain, and resolve at the end of turn.
+ - Cancel an arte setup
+ - End their turn
+ 
+ 
+These actions are taken in PM. Once they complete their turn, the Artes resolve and damage is dealt. A variety of effects can occur from Recipes, Pre-existing arte effects, and items during this phase, should the necessary conditions be met. Once all actions have been resolved, the player's turn ends, and the next player's turn begins.
+
+
+Arte Chaining
+
+Artes produced in sequence may be chained. Chains proceed from Base to Master to Arcane to Mystic Arte, and likewise from Novice to Intermediate to Advanced to Mystic Arte in terms of spells. Chains create a positive reciprocal effect with each other, in that a chain will decrease the CC cost of the following ability by 1 (cumulatively, so the third in a chain receives a 2 CC discount). Blocking abilities also are more likely to be overcome with a chain. 
+
+In addition to normal chains, each arte has a family. If all Artes in a chain belong to the same family, a small damage bonus will be applied, again cumulatively increasing with the length of the chain.
+
+Certain artes when used by both a player's Hero Cards will create a Unison Attack or Combination Arte, or an Altered Arte. Various combinations may become available.
+
+
+Statistics
+
+HP - The measure of a Hero Card's life. When this reaches 0, the Hero Card dies.
+CC - The amount of action points a Hero Card can spend per turn. CC may only be spent on a player's turn.
+
+Attack - Attack is a measure of physical damage. It is the sum of all attack bonuses present (Hero, Arte, Effects, etc).
+Defense - Defense is the measure of Defensive ability. This reduces the damage taken from Attack.
+Magic - Magic determines the power of offensive or healing spells. Magic does not get reduced by defense.
+
+
+The basic mechanic in play is that Attackers are best against those with weak defense, defense is best against strong Attackers, and magic is best against those with high Defense.
+
+
+Experience
+
+Once a duel is complete, the player and their particpating heroes all gain experience. Winning battles will gain experience for both. Losing battles will lose experience for the player, but still gain a modicum of experience for the heroes.
+
+The experience gained is determined by the opponent's relative level.
+
+
+Money
+
+In addition to experience, winning a battle gains you money. Money can be used to purchase boosters or cards, to trade, or to gamble with.
+
+
+Ante
+
+The victor of every battle will recieve two cards at random from the opponent's deck, possibly including their Hero Cards.
+
+
+Post-Battle
+
+A player may purchase boosters, trade cards and money, and gamble by using the bot outside of duels. A variety of statistics may also be available.
