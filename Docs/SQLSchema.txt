@@ -1,4 +1,4 @@
-Tales CCG SQL Schema
+Tales TPG SQL Schema
 
 
 
@@ -50,34 +50,24 @@ TABLE CardList
     FieldA  int
     FieldB  int
     FieldC  int
-    etc... 12 fields in all so far
+    etc... 8 fields in all so far
 
 
 Card Types
 
     0 - Character Type
+            TP          int
+            HP          int
             Attack      int
             Defense     int
             Magic       int
-            CC          int
-            SpAbility   int
-            Class       int     // Bitfield for equipment/arte usage
-            HP          int
-            
-            Level       int
-            HPGrowth    int
-            AttGrowth   int
-            DefGrowth   int
-            MagGrowth   int
-            
+            Class       int     // Bitfield for equipment
+            Artes       int     // Bitfield for artes
+            Level       int            
             
             
     1 - Arte
-            CCCost      int
-            AttPower    int
-            DefPower    int
-            MagPower    int
-            Class       int     // Bitfield for character mappings
+            TPCost      int
             Category    int
                 0 - Base Arte
                 1 - Master Arte
@@ -86,63 +76,56 @@ Card Types
                 4 - Intermediate Spell
                 5 - Advanced Spell
                 6 - Mystic Arte
-            
+            AttPower    int
+            MagPower    int
             Family      int
             
             EffectA     int
             EffectAQuan int
-            EffectB     int
-            EffectBQuan int
                 // See effect table
 
             
     2 - Weapon
-            CCIncrease  int
+            TPIncrease  int
+            HPPower     int
             AttPower    int
             DefPower    int
             MagPower    int
-            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
             EffectAQuan int
-            EffectB     int
-            EffectBQuan int
                 // See effect table
 
     
     3 - Armor
-            CCIncrease  int
+            TPIncrease  int
+            HPPower     int
             AttPower    int
             DefPower    int
             MagPower    int
-            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
             EffectAQuan int
-            EffectB     int
-            EffectBQuan int
                 // See effect table
     
     
     4 - Accessory
-            CCIncrease  int
+            TPIncrease  int
+            HPPower     int
             AttPower    int
             DefPower    int
             MagPower    int
-            HPPower     int
             Class       int     // Bitfield for character mappings
             
             EffectA     int
             EffectAQuan int
-            EffectB     int
-            EffectBQuan int
                 // See effect table
 
 
     5 - Item
-            CCCost      int
+            TPCost      int
 
             EffectA     int
             EffectAQuan int
