@@ -1,46 +1,53 @@
 Effect List
 
-
-Effects generate actions based on a quantity. The actions are numerous and varied. 
-The quantity is represented below as <#>.
+Note: All effects stack additvely
 
 
+	Effect					Value effect
 
-Block the first <#> attacks in a chain.
-Block the first <#> spells in a chain.
-Block the first <#> artes in a chain.
-Heal single Hero for <#>% HP.
-Heal all ally Heroes for <#>% HP.
-Opponent loses <#> turns.
-Own turn ends.
-Target Hero gains <#> CC.
-All ally Heroes gain <#> CC.
-Deal <#> Damage to card user.
-Deal <#> Damage to all allies.
-Revives target Hero for <#>% HP.
-Increase Attack of next arte chain by <#>
-Increase Magic of next arte chain by <#>
-Increase Attack of next arte chain by <#>%
-Increase Magic of next arte chain by <#>%
-Increases target Hero Defense by <#> until beginning of owner's next turn
-Increases target Hero Defense by <#>% until beginning of owner's next turn
-Decreases all CC costs this turn for Hero by <#>
-Decreases all CC costs this turn for allies by <#>
-Decreases all CC costs this turn for opponents by <#>
-
-
-
-Effects can also be activation conditions. It makes it more dramatic!
-
-
-Activates at beginning of opponent's <#>th chain
-Activates during the next resolution phase of opponent
-Activates when Hero drops below <#>% HP
-Activates when Ally drops below <#>% HP
-Activates when Hero dies
-Activates when an Ally Hero dies
-Activates when an Enemy Hero drops below <#>% HP
-Activates when an Enemy Hero dies
-Activates when an enemy plays an item
-Activates when an enemy plays a recipe
-Activates when an enemy equips something
+0 	- No effect				None
+1	- HP restored to target			% HP restored
+2	- HP restored to allies			% HP restored
+3	- HP restored to self			% HP restored
+4	- HP restored on hit			% HP restored
+5	- TP restored to target			# TP restored
+6	- TP restored to allies			# TP restored
+7	- TP restored to self			# TP restored
+8	- TP restored on hit			# TP restored
+9	- Att+ while in play			% Att increased
+10	- Att+ 1 turn to target			% Att increased
+11	- Att+ 3 turns to target		% Att increased
+12	- Att+ 1 turns to allies		% Att increased
+13	- Att+ 3 turns to allies		% Att increased
+14	- Def+ while in play			% Def increased
+15	- Def+ 1 turn to target			% Def increased
+16	- Def+ 3 turns to target		% Def increased
+17	- Def+ 1 turns to allies		% Def increased
+18	- Def+ 3 turns to allies		% Def increased
+19	- Mag+ while in play			% Mag increased
+20	- Mag+ 1 turn to target			% Mag increased
+21	- Mag+ 3 turns to target		% Mag increased
+22	- Mag+ 1 turns to allies		% Mag increased
+23	- Mag+ 3 turns to allies		% Mag increased
+24	- Revive				% Chance to revive an incapacitated player
+25	- Gold Reward Increased			% Increased
+26	- EXP Reward Increased			% Increased
+27	- Dodge					% Chance of enemy attacks missing
+28	- Death					% Chance of instant death to target
+29	- Damage				% Modification to all damage dealt until next turn (1 player,  1 enemy turn)
+30	- Block Magic Combo			# of artes to block from next magic combo targeted at player
+31	- Block Physical Combo			# of rates to block from next physical combo targeted at player
+32	- Block Artes Combo			# of rates to block from next combo targeted at player
+33	- Skip Turn				# of Enemy turns to skip
+34	- Damage				# of Damage to deal to target
+35	- Draw Cards				# of Cards to draw
+36	- Cancels Dodge Chance			
+37	- Remove Effects from Target
+38	- Removes Effects from Enemies
+39	- Ends your own turn
+40	- Can not drop below 1 HP unless HP=1
+41	- Grants a free card after battle
+42	- Reveals the cards the enemy draws
+43	- Reveals the enemy's hand
+44	- Changes target card into a random card from the same family for the battle
+45	- Revive on Death			% chance to revive on dying, removing the accessory from the battle

@@ -1,0 +1,9 @@
+Targets List
+
+0 	- Player chooses a valid enemy target
+1	- Player chooses a valid allied target
+2	- Player chooses a valid Knocked-out ally
+3	- Self targeted
+4	- Both enemies targeted
+5	- No target
+6	- Target a card in your hand
