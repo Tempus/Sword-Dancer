@@ -50,7 +50,6 @@ TABLE CardList
     FieldA  int
     FieldB  int
     FieldC  int
-    etc... 8 fields in all so far
 
 
 Card Types
@@ -83,6 +82,8 @@ Card Types
             EffectA     int
             EffectAQuan int
                 // See effect table
+
+            Target      int
 
             
     2 - Weapon
@@ -132,6 +133,7 @@ Card Types
             EffectB     int
             EffectBQuan int
                 // See effect table
+            Target      int
 
     6 - Recipe
             EffectA     int
@@ -139,3 +141,4 @@ Card Types
             EffectB     int
             EffectBQuan int
                 // See effect table
+            Target      int
