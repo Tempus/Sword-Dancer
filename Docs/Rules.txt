@@ -3,7 +3,7 @@ Rules and Game Description
 
 Setup
 
-Each Player starts with 2 Hero Cards on the field, and a deck of 30-50 cards (tentative amount).
+Each Player starts with 2 Hero Cards on the field, and a deck of 30-50 cards (tentative amount). A max of 3 of the same card may be present in a deck, excepting character cards, which are limited to 1 per type per deck.
 
 
 Objective
@@ -67,7 +67,7 @@ In addition to experience, winning a battle gains you money. Money can be used t
 
 Ante
 
-The victor of every battle will recieve two cards at random from the opponent's deck, possibly including their Hero Cards.
+The victor of every battle will recieve two cards at random from the opponent's deck, excluding their Hero Cards.
 
 
 Post-Battle

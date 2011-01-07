@@ -386,10 +386,7 @@ class Deck:
             
             
         # ToDo: Grab the characters from SQL, and put them into their boxes
-        
-        self.cOneHP = 0
-        self.cTwoHP = 0
-        
+                
         self.characters[0] = Character(cardID)
         self.characters[1] = Character(cardIDb)
         
@@ -575,20 +572,100 @@ class Deck:
 
             # Reveals Enemy hand
             if effect[0] == 43:
-                self.parent.decks = 
+                currentDeck = self.parent.players.index(self.parent.turn)
+                if currentDeck == 1:
+                    deckIndex = 0
+                else:
+                    deckIndex = 1
+                hand = self.parent.decks[deckIndex].displayHand()
             
-                returnString.append(self.parent.)
+                if len(hand) == 1:
+                    temp = "{1} has just {0} in his hand.".format(hand[0], self.parent.players[deckIndex])
+                    
+                elif len(hand) == 2:
+                    temp = "{2} has {0} and {1}.".format(hand[0], hand[1], self.parent.players[deckIndex])
+                
+                else:
+                    temp = "{2} has {0}and {1}.".format("".join(["%s, " % (k) for k in hand[:-1]]), hand[-1], self.parent.players[deckIndex])
+            
+                returnString.append(temp)
 
-            #
+            # Rune Bottle
             if effect[0] == 44:
-                               
+                # ToDo: Rune bottle effect
+                
+                                      
         return "".join(["%s\n" % (k) for k in returnString])
+    
     
     def useRecipe(self, cardName, targetChar):
         """Uses a recipe card"""
     
         cardID = self.cardLookup(cardName)
         card = Card(cardID)
+    
+        if card.type != 6:
+            return "{0} isn't a recipe".format(card.name())
+    
+        for char in self.characters:
+            if char.name() == targetChar:
+                target = char
+            
+        if (card.target != 5) and (targetChar == None):
+            return "You need to say who to use it on."
+                
+        self.hand.discard(card)
+        
+        returnString = []
+        # Processes effects
+        for effect in card.effects():            
+            
+            # Heal One
+            if effect[0] == 1:
+                result = target.heal(effect[1])
+                returnString.append("{0} was healed to {1}.".format(target.name(), result))
+
+            # Heal All
+            if effect[0] == 2:
+                resultA = self.character[0].heal(effect[1])
+                resultB = self.character[1].heal(effect[1])
+                returnString.append("{0} was healed to {1} and {1} was healed to {2}.".format(self.character[0].name(), resultA, self.character[1].name(), resultB))
+
+            # TP add One
+            if effect[0] == 5:
+                result = target.modifyTP(effect[1])
+                returnString.append("{0} gained {1} extra TP.".format(target.name(), effect[1]))
+
+            # TP add All
+            if effect[0] == 6:
+                self.character[0].modifyTP(effect[1])
+                self.character[1].modifyTP(effect[1])
+                returnString.append("{0} and {1} both gained {2} extra TP.".format(self.character[0].name(), self.character[1].name(), effect[1]))
+                
+            # Att+ 1 turn to allies
+            if effect[0] == 12:
+                # ToDo: Skip Turn
+
+            # Def+ 1 turn to allies
+            if effect[0] == 17:
+                # ToDo: Skip Turn
+
+            # Mag+ 1 turn to allies
+            if effect[0] == 22:
+                # ToDo: Skip Turn
+
+            # Revive
+            if effect[0] == 24:
+                target.revive()
+                returnString.append("{0} was revived.".format(target.name()))
+
+            # Draw Cards
+            if effect[0] == 35:
+                returnString.append(self.drawCards(effect[1]))
+
+                
+                                      
+        return "".join(["%s\n" % (k) for k in returnString])
     
 
     def useEquip(self, cardName, targetChar):
@@ -613,6 +690,7 @@ class Deck:
         
         #ToDo: the function ^_^
         # return cardID
+
 
     def processEffect(self ):
         

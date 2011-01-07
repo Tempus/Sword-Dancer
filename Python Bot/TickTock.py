@@ -346,7 +346,10 @@ class TickTock(SingleServerIRCBot):
 
         
     def end_turn(self):
-        pass
+        self.reply("{0}'s turn is over.".format(self.turn), GameRoom)
+        
+        
+        
         
         # ToDo: End turn crap
 

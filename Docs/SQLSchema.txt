@@ -62,7 +62,7 @@ Card Types
             Magic       int
             Class       int     // Bitfield for equipment
             Artes       int     // Bitfield for artes
-            Level       int            
+            Level       int     
             
             
     1 - Arte

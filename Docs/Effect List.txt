@@ -51,3 +51,9 @@ Note: All effects stack additvely
 43	- Reveals the enemy's hand
 44	- Changes target card into a random card from the same family for the battle
 45	- Revive on Death			% chance to revive on dying, removing the accessory from the battle
+
+
+
+Effects that apply to characters:
+
+[4, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 27, 28, 
