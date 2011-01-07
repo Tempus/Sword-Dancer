@@ -35,7 +35,7 @@ class OutputManager(Thread):
 def trivial_bot_main(botClass):
   if len(sys.argv) != 8:
     botname = os.path.basename(sys.argv[0])
-    print "Incorrect Usage Message and Instructions go here"
+    print "Usage Message and Instructions go here"
 #    sys.exit(1)
 
   # Actual arguments are...?
