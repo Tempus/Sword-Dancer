@@ -19,17 +19,20 @@ from time import sleep
 from collections import deque
 from random import choice
 
+GameRoom = '#CCGtest'
+ViewRoom = '#ObservationDeck'
+
 
 class Character:
     """Character card class"""
     
-    def __init__(self, cardID):
+    def __init__(self, cardID, reply):
         """Looks up a character by ID from the SQL database, and loads the info"""
         
         
         # ToDo: Load card from database
 
-
+        self.reply = reply
         self.type = 0
         
         self.name = ''
@@ -49,8 +52,11 @@ class Character:
         self.currentTP = self.TP
         
 
-        # Effect list. Format: EffectID, Effect Amount, ExpiryDate, EquipAttach (0 is none, 2 is weapon, 3 armour, 4 accessory)
+        # Effect list. Format: EffectID, Effect Amount, EquipAttach (0 is none, 2 is weapon, 3 armour, 4 accessory)
         self.effectList = []
+        
+        # Temporary Effects: A deque of three lists that pops left each turn and appends an empty list right. Att, Dfn, Mag
+        self.tempEffects = deque([[0,0,0], [0,0,0], [0,0,0]])
         
         # Equipment list. Format: TP, HP, Att, Def, Mag
         self.weapon = [0,0,0,0,0]
@@ -72,10 +78,34 @@ class Character:
     def hurt(self, modifer):
         """Modifies the current HP by an amount"""
         
+        oldHP = self.currentHP
         self.currentHP += modifier
+
         if self.currentHP < 0:
+        
             self.currentHP = 0
             self.ko = true
+
+            #  40	- Can not drop below 1 HP unless HP=1
+            if self.hasEffect(40) != -1:
+                
+                if oldHP == 1:
+                    pass
+                else:
+                    self.reply("{0}'s equipment protects them from dying!".format(self.name()), GameRoom) 
+                    self.currentHP = 1
+                    self.ko = False        
+
+            #  45	- Revive on Death			    % chance to revive on dying, removing the accessory from the battle
+            a = self.hasEffect(45)
+            if a != -1:
+            
+                if random.randint(0, 100) < a:
+                    self.reply("{0}'s equipment revives them, and recovers 30% health.".format(self.name()), GameRoom) 
+                    self.ko = False
+                    self.heal(30)
+            
+            self.reply("{0} was knocked unconcious!".format(self.name()), GameRoom)
         
         return self.currentHP
     
@@ -126,13 +156,13 @@ class Character:
     def stats(self)
         """Returns a list of the current statistics for the player: TP, HPmax, Att, Def, Mag"""
 
-        # ToDo: apply effects
+        bonus = self.rotateEffects()
         
         stats = [self.TP + self.weapon[0] + self.armor[0] + self.accessory[0],
                  self.HP + self.weapon[1] + self.armor[1] + self.accessory[1],
-                 self.Att + self.weapon[2] + self.armor[2] + self.accessory[2],
-                 self.Dfn + self.weapon[3] + self.armor[3] + self.accessory[3],
-                 self.Mag + self.weapon[4] + self.armor[4] + self.accessory[4]]
+                 (self.Att + self.weapon[2] + self.armor[2] + self.accessory[2]) * (1+(bonus[0]/100)),
+                 (self.Dfn + self.weapon[3] + self.armor[3] + self.accessory[3]) * (1+(bonus[1]/100)),
+                 (self.Mag + self.weapon[4] + self.armor[4] + self.accessory[4]) * (1+(bonus[2]/100))]
                  
         return stats
         
@@ -154,7 +184,7 @@ class Character:
         
         # Remove equipment effects
         for x in xrange(len(effectList)):
-            if effectList[x][3] == card.type:
+            if effectList[x][2] == card.type:
                 effectList.pop(x)
         
         # Add in the stats
@@ -169,7 +199,7 @@ class Character:
             
         # Add the effect if it exists    
         if card.EffA > 0:
-            effectList.append([card.EffA, card.AQuan, -1, card.type])
+            effectList.append([card.EffA, card.AQuan, card.type])
         
         
     def arteCheck(self, card):
@@ -184,32 +214,75 @@ class Character:
         return False
 
 
-    def applyEffect(self, card):
-        """Applies effects from a card"""
+    def hasEffect(self, effType):
+        """Checks for an effect type, and returns the amount"""
 
-#        if card.type != 1 or 5 or 6:
-#            return
-#        
-#        if card.EffA > 0:
-#            if card.EffA == 10 or 12 or 15 or 17 or 20 or 22:
-#                duration = 1
-#            if card.EffA == 11 or 13 or 16 or 18 or 21 or 23:
-#                duration = 3
-#                
-#            effectList.append([card.EffA, card.AQuan, duration, 0])
-#
-#        try:
-#            if card.EffB > 0:
-#                if card.EffB == 10 or 12 or 15 or 17 or 20 or 22:
-#                    duration = 1
-#                if card.EffB == 11 or 13 or 16 or 18 or 21 or 23:
-#                    duration = 3
-#
-#                effectList.append([card.EffB, card.BQuan, duration, 0])
+        for effect in self.effectList:
+            if effect[0] == effType:
+                return effect[1]
 
-    # ToDo: apply effects to characters
-    # ToDo: turnly effect resolutions
+        return -1
 
+        #  4	- HP restored on hit			% HP restored
+        #  8	- TP restored on hit			# TP restored
+        #  25	- Gold Reward Increased			% Increased
+        #  26	- EXP Reward Increased			% Increased
+        #  27	- Dodge					        % Chance of enemy attacks missing
+        #  28	- Death					        % Chance of instant death to target
+        #  30	- Block Magic Combo			    # of artes to block from next magic combo targeted at player
+        #  31	- Block Physical Combo			# of rates to block from next physical combo targeted at player
+        #  32	- Block Artes Combo			    # of rates to block from next combo targeted at player
+        #  34	- Damage				        # of Damage to deal to target
+        #  36	- Cancels Dodge Chance			
+        #  41	- Grants a free card after battle
+        #  42	- Reveals the cards the enemy draws
+
+
+    def cardDraws(self):
+        """Returns the bonus card draws from equipped effects"""
+        
+        #  35	- Draw Cards				    # of Cards to draw
+        c = 0
+        
+        for effect in self.effectList:
+            if effect[0] == 35:
+                c += effect[1]
+
+        return c
+        
+
+    def rotateEffects(self):
+        """Rotates the temporary effects and returns a sum"""
+        
+        a = [0,0,0]
+        
+        for b in self.tempEffects:
+            a[0] += b[0]
+            a[1] += b[1]
+            a[2] += b[2]
+                
+        return a
+        
+        
+    def expireEffects(self):
+        """Processes effects that expire. Run at end of turn."""
+        
+        self.tempEffects.popleft()
+        self.tempEffects.append([0,0,0])
+        
+    
+    def addTempEffect(self, index, temptype, amount):
+        """Adds temporary percentage based boosts."""
+
+        if index == 1:
+            alist = self.tempEffects.popleft()
+            alist[temptype] += amount
+            self.tempEffects.appendleft(alist)
+
+        if index == 3:
+            alist = self.tempEffects.pop()
+            alist[temptype] += amount
+            self.tempEffects.append(alist)
 
 
 
@@ -379,16 +452,13 @@ class Deck:
         
         
         # Now shuffle the cards randomly, and put them into the deck
-        for x in xrange(len(cards)):
-            card = random.choice(cards)
-            self.cardList.append(card)
-            cards.pop(cards.index(card))
-            
+        self.cardList = random.shuffle(cards)
+                    
             
         # ToDo: Grab the characters from SQL, and put them into their boxes
                 
-        self.characters[0] = Character(cardID)
-        self.characters[1] = Character(cardIDb)
+        self.characters[0] = Character(cardID, self.parent.reply)
+        self.characters[1] = Character(cardIDb, self.parent.reply)
         
 
     
@@ -490,7 +560,7 @@ class Deck:
             pass
         
 
-    def useItem(self, cardName, targetChar, userChar):
+    def useItem(self, cardName, target, user):
         """Uses an item card"""
     
         cardID = self.cardLookup(cardName)
@@ -498,22 +568,16 @@ class Deck:
     
         if card.type != 5:
             return "{0} isn't an item".format(card.name())
-    
-        for char in self.characters:
-            if char.name() == targetChar:
-                target = char
-            if char.name() == userChar:
-                user = char
-    
+        
         if user.currentTP() < card.TP:
             return "{0} doesn't have enough to TP to use that item".format(user.name())
         
-        if (card.target != 5) and (targetChar == None):
+        if (card.target != 5) and (target == None):
             return "You need to say who to use it on."
         
         if card.target == 6:
             for handCard in self.hand:
-                if targetChar == handCard.name():
+                if target == handCard.name():
                     target = handCard
 
         if (card.target == 6) and (target == None):
@@ -598,7 +662,7 @@ class Deck:
         return "".join(["%s\n" % (k) for k in returnString])
     
     
-    def useRecipe(self, cardName, targetChar):
+    def useRecipe(self, cardName, target):
         """Uses a recipe card"""
     
         cardID = self.cardLookup(cardName)
@@ -606,11 +670,7 @@ class Deck:
     
         if card.type != 6:
             return "{0} isn't a recipe".format(card.name())
-    
-        for char in self.characters:
-            if char.name() == targetChar:
-                target = char
-            
+                
         if (card.target != 5) and (targetChar == None):
             return "You need to say who to use it on."
                 
@@ -644,15 +704,15 @@ class Deck:
                 
             # Att+ 1 turn to allies
             if effect[0] == 12:
-                # ToDo: Skip Turn
+                target.addAttackEffect(1, 0, effect[1])
 
             # Def+ 1 turn to allies
             if effect[0] == 17:
-                # ToDo: Skip Turn
+                target.addDefenseEffect(1, 1, effect[1])
 
             # Mag+ 1 turn to allies
             if effect[0] == 22:
-                # ToDo: Skip Turn
+                target.addMagicEffect(1, 2, effect[1])
 
             # Revive
             if effect[0] == 24:
@@ -662,17 +722,32 @@ class Deck:
             # Draw Cards
             if effect[0] == 35:
                 returnString.append(self.drawCards(effect[1]))
-
                 
                                       
         return "".join(["%s\n" % (k) for k in returnString])
     
 
-    def useEquip(self, cardName, targetChar):
+    def useEquip(self, cardName, target):
         """Uses an equip card"""
     
         cardID = self.cardLookup(cardName)
         card = Card(cardID)
+
+        if card.type != 2 or 3 or 4:
+            return "{0} isn't equipment".format(card.name())
+                
+        if not target.equipCheck(card):
+            return "{0} can't equip that!".format(target.name())
+ 
+        if target.currentTP() < card.TP:
+            return "{0} doesn't have enough to TP to use that item".format(user.name())
+
+
+        target.modifyTP(-4)
+        self.hand.discard(card)
+        target.equip(card)
+        
+        return "{0} equipped.".format(card.name())
 
     
     def useArte(self, cardName, targetChar, userChar):
@@ -683,12 +758,29 @@ class Deck:
 
 
 
+    def getCharacter(self, charName):
+        """Returns a character class from a name."""
+        
+        for char in self.characters:
+            if char.name() == charName:
+                return char
+
+
+    def getCardDraws(self):
+        """Returns the amount of cards to draw at the beginning of a turn"""
+        
+        c = 1
+        for char in self.characters:
+            c += char.cardDraws()
+            
+        return c
+        
 
     def cardLookup(self, cardName):
     
         pass
         
-        #ToDo: the function ^_^
+        # ToDo: the function ^_^
         # return cardID
 
 

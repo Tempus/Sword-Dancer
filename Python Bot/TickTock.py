@@ -253,6 +253,10 @@ class TickTock(SingleServerIRCBot):
             else:
                 otherChars.extend(self.decks[x].charNames())
         
+        if deckIndex == 1:
+            otherIndex = 0
+        elif deckIndex == 0:
+            otherIndex = 1
         
 
         # Use an item
@@ -265,7 +269,7 @@ class TickTock(SingleServerIRCBot):
 
                     for charac in ownChars:
                         if charac.lower() in msg.lower():
-                            char = charac
+                            char = self.decks[deckIndex].getCharacter(charac)
                             
                     reply = self.decks[deckIndex].useRecipe(recipe, char)
                     self.reply(reply, GameRoom)
@@ -283,14 +287,14 @@ class TickTock(SingleServerIRCBot):
 
                     for charac in ownChars:
                         if charac.lower() in msg.lower():
-                            user = charac
+                            char = self.decks[deckIndex].getCharacter(charac)
 
                     if user == None:
                         self.reply("You didn't specify who to use the item with")
                         
                     for charac in ownChars:
                         if 'on ' + charac.lower() in msg.lower():
-                            char = charac
+                            char = self.decks[deckIndex].getCharacter(charac)
                     
                     for carda in hand:
                         if 'on ' + cards.lower() in msg.lower():
@@ -311,7 +315,7 @@ class TickTock(SingleServerIRCBot):
 
                     for charac in ownChars:
                         if charac.lower() in msg.lower():
-                            char = charac
+                            char = self.decks[deckIndex].getCharacter(charac)
                             
                     reply = self.decks[deckIndex].useEquip(equip, char)
                     self.reply(reply, GameRoom)
@@ -329,11 +333,11 @@ class TickTock(SingleServerIRCBot):
 
                     for charac in ownChars:
                         if charac.lower() in msg.lower():
-                            user = charac
+                            char = self.decks[deckIndex].getCharacter(charac)
 
                     for 'on ' + charac in otherChars:
                         if charac.lower() in msg.lower():
-                            char = charac
+                            char = self.decks[otherIndex].getCharacter(charac)
                             
                     reply = self.decks[deckIndex].useArte(arte, char, user)
                     self.reply(reply, GameRoom)
