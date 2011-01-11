@@ -17,11 +17,15 @@ them intelligently, of course!
 
 """
 
-import sys, string, random, time, re
+import sys, string, random, time, re, sqlite3
 from ircbot import SingleServerIRCBot, IRCDict
 from irclib import nm_to_n, nm_to_h, nm_to_uh, nm_to_u, irc_lower
 import botcommon
 from ccg import Deck
+
+con = sqlite3.connect('/Users/Tempus/Projects/Tales Online CCG/Docs/Raw Tables/CardDatabase.csv')
+cur = con.cursor()
+
 
 #--------------------------------------------------------------------
 # Confirmation strings for admins.
@@ -350,7 +354,10 @@ class TickTock(SingleServerIRCBot):
 
         
     def end_turn(self):
-        self.reply("{0}'s turn is over.".format(self.turn), GameRoom)
+    
+        self.players[:].pop(
+    
+        self.reply("{0}'s turn is over, and {1}'s turn begins.".format(self.turn, ), GameRoom)
         
         
         

@@ -18,9 +18,13 @@ from math import log
 from time import sleep
 from collections import deque
 from random import choice
+import sqlite3
 
 GameRoom = '#CCGtest'
 ViewRoom = '#ObservationDeck'
+
+con = sqlite3.connect('/Users/Tempus/Projects/Tales Online CCG/Docs/Raw Tables/CardDatabase.csv')
+cur = con.cursor()
 
 
 class Character:
@@ -30,23 +34,28 @@ class Character:
         """Looks up a character by ID from the SQL database, and loads the info"""
         
         
-        # ToDo: Load card from database
+        cur.execute('SELECT * from CardList where ID=?', (cardID,))
+        cardData = cur.fetchall()[0]
 
+
+        # ToDo - calculate the level of the Hero from the SQL database
+        # Level = 
+        
         self.reply = reply
         self.type = 0
         
-        self.name = ''
-        self.description = ''
+        self.name = cardData[2]
+        self.description = cardData[3]
         
-        self.rarity = 1
-        self.equip = bf() # A sliceable integer class, where int[0] is the lower bit
-        self.artes = bf() # A sliceable integer class, where int[0] is the lower bit
+        self.rarity = cardData[5]
+        self.equip = bf(cardData[11]) # A sliceable integer class, where int[0] is the lower bit
+        self.artes = bf(cardData[12]) # A sliceable integer class, where int[0] is the lower bit
 
-        self.TP = None * (Level/100 + 1)
-        self.HP = None * (Level/100 + 1)
-        self.Att = None * (Level/100 + 1)
-        self.Mag = None * (Level/100 + 1)
-        self.Dfn = None * (Level/100 + 1)
+        self.TP = cardData[6] * (Level/100 + 1)
+        self.HP = cardData[7] * (Level/100 + 1)
+        self.Att = cardData[8] * (Level/100 + 1)
+        self.Mag = cardData[10] * (Level/100 + 1)
+        self.Dfn = cardData[9] * (Level/100 + 1)
         
         self.currentHP = self.HP
         self.currentTP = self.TP
@@ -293,41 +302,45 @@ class Card:
         """Looks up a card by ID from the SQL database, and loads the info"""
         
         
-        # ToDo: Load card from database
+        cur.execute('SELECT * from CardList where ID=?', (cardID,))
+        cardData = cur.fetchall()[0]
+
+        self.ID = cardID
+        self.type = cardData[1]
         
-        self.type = 1
+        self.name = cardData[2]
+        self.description = cardData[3]
         
-        self.name = ''
-        self.description = ''
-        
-        self.rarity = 1
-        self.family = bf() # A sliceable integer class, where int[0] is the lower bit
+        self.rarity = cardData[5]
+        self.family = bf(cardData[4]) # A sliceable integer class, where int[0] is the lower bit
         
         if type != 6:
-            self.TP = None
+            self.TP = cardData[6]
         
         if type == 2 or 3 or 4:
-            self.HP = None
+            self.HP = cardData[7]
 
         if type != 5 or 6:
-            self.Att = None
-            self.Mag = None
+            self.Att = cardData[8]
+            self.Mag = cardData[10]
 
         if type == 2 or 3 or 4:
-            self.Dfn = None
+            self.Dfn = cardData[9]
 
-        self.EffA = None
-        self.AQuan = None
+        self.EffA = cardData[16]
+        self.AQuan = cardData[17]
         
         if type == 5 or 6:
-            self.EffB = None
-            self.BQuan = None
+            self.EffB = cardData[18]
+            self.BQuan = cardData[19]
         
         it type == 1 or 5 or 6:
-            self.target = None
+            self.target = cardData[14]
 
         it type == 1:
-            self.category = None
+            self.category = cardData[15]
+        
+        self.TPcost = cardData[13]
         
         
         # For the plaintext outputting
@@ -365,6 +378,8 @@ class Card:
                      self.rarityString(self.rarity),
                      self.familyString(self.family)
                      )
+          
+        # ToDo: all the other card types
                      
                      
     def effectString(self, effect, amount):
@@ -445,11 +460,32 @@ class Deck:
     def loadDeck(self, deckNum=1):
         """Loads a deck into the class"""
         
-        # ToDo: Pull a cardlist from SQL here
+        # Get the player ID
+        # ToDo: identification by registration info or hostmask?
+        cur.execute('SELECT ID from PlayerList where Name=?', (self.player))
+        
+        PlayerID = cur.fetchall()[0]
+        if PlayerID == None:
+            parent.reply("Sorry, we couldn't find your name in the database.", GameRoom)
+            
+            # ToDo: figure out how to handle this scenario.
+        
+        
         # only the card IDs are necessary - pass it to the Card class
         # don't put in the type 0  character cards
+        cur.execute('SELECT CardID from CardList where PID=? and Deck=?', (PlayerID,deckNum))
         cards = []
+        characterTemp = []
+
+        for x in cur.fetchall():
+            card = Card(x[0])
+            if card.type != 0:
+                cards.append(card)
+            else:
+                characterTemp(card)
         
+        cardID = characterTemp[0].ID
+        cardIDb = characterTemp[1].ID
         
         # Now shuffle the cards randomly, and put them into the deck
         self.cardList = random.shuffle(cards)
@@ -780,14 +816,16 @@ class Deck:
     
         pass
         
-        # ToDo: the function ^_^
-        # return cardID
-
-
-    def processEffect(self ):
+        cur.execute('SELECT ID from CardList where Name=?', (cardName,))
+        cardData = cur.fetchall()
         
-        # ToDo: make a function that processes new effects if passed
-        #       and processes all the old effects if not?
+        if cardData = []:
+            print "Card lookup for {0} failed.".format(cardName)
+            # ToDo: handle failure case better
+            return 0
+        else:
+            return cardData[0][0]
+
         
         
         

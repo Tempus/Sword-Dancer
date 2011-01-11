@@ -1,4 +1,4 @@
-Tales TPG SQL Schema
+Tales CCG SQL Schema
 
 
 
@@ -21,22 +21,10 @@ TABLE Record
     Date    int             // Unix time date (or an SQL date field, if your SQL db supports it, and you prefer it
 
 
-TABLE PlayerDeck
-    DeckID  primary_key
-    PID     foreign_key     // specifies the ID of the player from PlayerList
-    Name    varchar/whatever
-    etc
-
-
-TABLE PlayerDeckMapping
-    DeckID  foreign_key     // specifies the ID of the deck from PlayerDeck
-    CardID  foreign_key     // specifies the ID of the card from CardList
-
-
 TABLE PlayerCards
     PID     foreign_key // id from PlayerList
     CardID  foreign_key // id from CardList
-    Amount  int         // owned card count    
+    Deck    int         // the deck this card is assigned to, 0 if none
     Level   int         // only used for type 0 Cards
     
 
